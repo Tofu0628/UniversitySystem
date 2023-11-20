@@ -1,0 +1,45 @@
+﻿@model UniSys.Models.Enrollment
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Enrollment</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Enrollment_ID" />
+            <div class="form-group">
+                <label for="Student_ID">Student</label>
+                <select class="form-control" asp-for="Student_ID" id="Student_ID" name="Student_ID">
+                    <option value=""> ----- Select Student -----</option>
+                    @foreach (var student in ViewBag.Students)
+                    {
+                        <option value="@student.Student_ID">@student.Name</option>
+                    }
+                </select>
+                <span asp-validation-for="Student_ID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Subject_ID" class="control-label"></label>
+                <select asp-for="Subject_ID" class="form-control" asp-items="ViewBag.subjects"></select>
+                <span asp-validation-for="Subject_ID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

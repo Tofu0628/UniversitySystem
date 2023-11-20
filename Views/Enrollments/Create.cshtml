@@ -1,0 +1,82 @@
+﻿@model UniSys.Models.Enrollment
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Enrollment</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label for="Student_ID">Student</label>
+                <select class="form-control" asp-for="Student_ID" id="Student_ID" name="Student_ID">
+                    <option value=""> ----- Select Student -----</option>
+                    @foreach (var student in ViewBag.Students)
+                    {
+                        <option value="@student.Student_ID">@student.Name</option>
+                    }
+                </select>
+                <span asp-validation-for="Student_ID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label for="Subject_ID">Subject</label>
+                <select class="form-control" asp-for="Subject_ID" id="Subject_ID" name="Subject_ID" disabled>
+                    <option value="">----- Select Subject ------</option>
+                </select>
+                <span asp-validation-for="Subject_ID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(document).ready(function () {
+            $("#Student_ID").change(function () {
+                var Student_ID = $(this).val();
+                if (Student_ID !== "") {
+                    $.ajax({
+                        url: "/Enrollments/GetAvailableSubject",
+                        type: "GET",
+                        data: { id: Student_ID },
+                        success: function (result) {
+                            if (result.length > 0) {
+                                $("#Subject_ID").prop('disabled', false);
+                                $("#Subject_ID").empty();
+                                $.each(result, function (i, item) {
+                                    $("#Subject_ID").append($('<option>', {
+                                        value: item.value,
+                                        text: item.text
+                                    }));
+                                });
+                            } else {
+                                $("#Subject_ID").prop('disabled', true);
+                                $("#Subject_ID").html('<option value="0">----- No Available Subject ------</option>');
+                            }
+                        },
+                        error: function (error) {
+                            console.log(error);
+                        }
+                    });
+                } else {
+                    $("#Subject_ID").prop('disabled', true);
+                    $("#Subject_ID").html('<option value="">Select Subject</option>');
+                }
+            });
+        });
+    </script>
+}

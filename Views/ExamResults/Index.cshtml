@@ -1,0 +1,90 @@
+﻿@model IEnumerable<UniSys.Models.ExamResult>
+
+@{
+    ViewData["Title"] = "Index";
+    var errorMessage = TempData["ErrorMessage"] as string;
+    var successMessage = TempData["SuccessMessage"] as string;
+}
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="alert alert-danger">@errorMessage</div>
+}
+@if (!string.IsNullOrEmpty(successMessage))
+{
+    <div class="alert alert-success">
+        @successMessage
+    </div>
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Student Name
+            </th>
+            <th>
+                Subject Title
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Mark)
+            </th>
+            <th>
+                Grade
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ExamDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+            @if (item.IsDelete == false)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelitem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelitem => item.Title)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Mark)
+                    </td>
+                    <td>
+                        @{
+                            var grade = "";
+                            var x = item.Mark;
+                            if (x >= 90) { grade = "A+"; }
+                            else if (x >= 80) { grade = "A"; }
+                            else if (x >= 70) { grade = "B"; }
+                            else if (x >= 60) { grade = "C"; }
+                            else if (x >= 50) { grade = "D"; }
+                            else { grade = "F"; }
+                        }
+                        @grade
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ExamDate)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Exam_ID">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.Exam_ID">Details</a>
+                        @if (item.IsDelete == false)
+                        {
+                            <span>| </span>
+
+                            <a asp-action="Delete" asp-route-id="@item.Exam_ID">Delete</a>
+                        }
+                    </td>
+                </tr>
+            }  
+}
+    </tbody>
+</table>

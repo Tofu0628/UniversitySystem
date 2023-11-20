@@ -1,0 +1,67 @@
+﻿@model UniSys.Models.ExamResult
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>ExamResult</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Student ID
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Student_ID)
+        </dd>
+        <dt class="col-sm-2">
+            Student Name
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class="col-sm-2">
+            Subject Name
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Mark)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Mark)
+        </dd>
+        <dt class="col-sm-2">
+            Grade
+        </dt>
+        <dd class="col-sm-10">
+            @{
+                var grade = "";
+                var x = Model.Mark;
+                if (x >= 50) { grade = "D"; }
+                if (x >= 60) { grade = "C"; }
+                if (x >= 70) { grade = "B"; }
+                if (x >= 80) { grade = "A"; }
+                if (x >= 90) { grade = "A+"; }
+                if (x < 50) { grade = "F"; }
+            }
+            @grade
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ExamDate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ExamDate)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Exam_ID" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>
